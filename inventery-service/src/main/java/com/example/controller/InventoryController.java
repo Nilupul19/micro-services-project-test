@@ -20,10 +20,11 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
-    @GetMapping("/{sku_code}")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<InventoryResponse> isInStock(@RequestParam List<String> skuCode){
         return inventoryService.isInStock(skuCode);
     }
     
 }
+

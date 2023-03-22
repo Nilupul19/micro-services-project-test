@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import com.example.orderservice.dto.InventoryResponse;
 import com.example.orderservice.dto.OrderLineItemDto;
 import com.example.orderservice.dto.OrderRequest;
@@ -33,7 +32,7 @@ public class OrderService {
         //set order name
         order.setOrderNumber(UUID.randomUUID().toString());
         
-        //convert orderlineitem dto  to orderlineitem Object and assign it to Order lineItem Object
+        //convert orderlineitem dto  to orderlineitem Object and assign it to a Order lineItem Object
         List<OrderLineItem> orderLineItems = orderRequest.getOrderLineItemDto()
                                                          .stream()
                                                          .map(this::mapToOrderLineItem)
@@ -41,7 +40,7 @@ public class OrderService {
         //set orderlineitem list 
         order.setOrderLineList(orderLineItems);
         
-        List<String> skuCodes = order.getOrderLineList().stream().map(i -> i.getSkuCode()).collect(Collectors.toList());
+        List<String> skuCodes = order.getOrderLineList().stream().map(OrderLineItem::getSkuCode).collect(Collectors.toList());
 
         //save order(place order to) dB
 
@@ -55,7 +54,7 @@ public class OrderService {
         boolean allProductsInStock = Arrays.stream(invenrtyResponses)
                                      .allMatch(InventoryResponse::isInStock);
 
-        if (result) {
+        if (allProductsInStock) {
             orderRepo.save(order);
         }
         
@@ -72,12 +71,14 @@ public class OrderService {
      OrderLineItem orderLineItem = new OrderLineItem();
      orderLineItem.setSkuCode(orderLineItemDto.getSkuCode());
      orderLineItem.setPrice(orderLineItemDto.getPrice());
-     orderLineItem.setQuantity( orderLineItemDto.getQuantity());   
+     orderLineItem.setQuantity(orderLineItemDto.getQuantity());   
 
      return orderLineItem;
 
     }
 
+
+    
 
 
 

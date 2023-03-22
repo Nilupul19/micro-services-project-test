@@ -3,12 +3,14 @@ package com.example;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 import com.example.model.Inventory;
 import com.example.repo.InventoryRepo;
 
 @SpringBootApplication
+@EnableEurekaClient
 public class InventeryServiceApplication {
 
 	public static void main(String[] args) {
